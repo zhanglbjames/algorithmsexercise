@@ -5,62 +5,88 @@ package zss.sort;
  * @version Created on 2017/3/24.
  */
 
+import java.util.Random;
+import static zss.util.Print.println;
+
 /**
  * <p>Description</p>
  * <p>
  * 快速排序
- *
+ * <p>
  * <p>
  * 典型的分治思想的应用
  */
 public class QuickSorter extends AbstractSorter {
 
-    public void sort(Comparable[] a) {
+    private static Random random = new Random();
+    private int compareCount = 0;
+    private int exchangeCount= 0;
 
+    public void sort(Comparable[] a) {
+        partition(a,0,a.length-1);
     }
 
     /**
      * 描述：
-     * 1.选择左边第一个元素作为基准待定排元素
-     * 2.将这个待排定元素挖出来 base = a[start]
-     * 3.从end开始向左(rightIndex = end)，直到找到一个小于等于基准元素的元素，挖出来填入左边的坑中
-     * 4.从start开始向右（leftIndex = start），直到找到一个大于等于基准元素，挖出来填入右边的坑中
-     * 5.直到  leftIndex == rightIndex
-     *
-     * Note: 右边是先比较再减（记忆方式，右边首先会用a[end]比较）
-     *       左边是先加再比较 (记忆方式，左边第一个为预先挖的坑，肯定从第二个位置开始 a[start+1])
+     * 1.随机选择一个划分值a[base] 其中 base 范围为 [start,end]，并将其与最后一个元素进行交换
+     * 2.在数组的左边划分一个小于等于区间（下称区间），刚开始这个区间没有元素
+     * 3.从左都右，和划分值进行比较，如果小于等于这个划分值则与小于等于区间外的右边第一个元素
+     * 进行交换，之后将区间吸纳刚刚交换的右临元素
+     * 4.如果大于则不交换，区间也不扩容，然后继续向右进行 3
+     * 5.直到倒数第二个元素
+     * 6.最后将最后一个元素（划分值）直接和区间右临的第一个元素交换位置
      *
      * @param a     待排序数组
      * @param start 起始位置
      * @param end   结束位置
      */
-    private int partition(Comparable[] a, int start, int end) {
+    @SuppressWarnings("unchecked")
+    private void partition(Comparable[] a, int start, int end) {
 
-        if (start == end){//只有一个元素直接返回
-            return start;
+        /*
+        * 等于 ：只有一个元素而且，但上次分区的时候排定的位置不是上个数组的首个位置
+        * start > end : 其实指的是 start - end = 1 ，也就是上次分区的时候排定的位置是上个数组的首个位置
+        * 则有 partition(a,start,start-1);因为小于等于区间始终未空，也就index没有增加过 始终为 index = start -1
+        * */
+        if (start >= end) {
+            return;
         }
 
-        //含有两个元素及以上
-        Comparable base = a[start];//选择第一个数作为待排定
-        int leftIndex = start;
-        int rightIndex = end;
+        //1.
+        //start + [0,end-start] = [start,end]   [0,end-start] = nextInt(end-start+1)
+        int base = start + random.nextInt(end - start + 1);//nextInt(3) -> 0,1,2
+        exchange(a, base, end);
 
-
-        while (leftIndex != rightIndex){
-            Boolean tag = true;//左右交换查找标志 true--开始右查找 false--开始左查找
-            if (tag) {
-
-            } else {
-
+        //2.
+        int index = start - 1;//区间右边界指针（被包含元素的最有一个索引）
+        for (int i = start; i < end; i++) { //不包括最后一个元素(划分值)
+            if (a[i].compareTo(a[end]) <= 0) {
+                exchange(a, index + 1, i);
+                index++;
+                exchangeCount ++;
             }
+            compareCount ++;
+        }
 
-        }  //指针重合 执行一次 然后退出循环
+        //6.
+        exchange(a, index + 1, end);
+        exchangeCount ++;
 
-        return leftIndex;
+        //递归  [start,index] -> index+1(已排定) -> [index+2,end]
+        partition(a, start, index);
+        partition(a, index + 2, end);
 
     }
 
+    private void exchange(Comparable[] a, int i, int j) {
+        Comparable tmp = a[i];
+        a[i] = a[j];
+        a[j] = tmp;
+    }
+
+
     public void summary() {
+        println("比较次数：" + compareCount + " 交换次数：" + exchangeCount);
 
     }
 }

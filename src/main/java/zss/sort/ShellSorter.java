@@ -61,6 +61,7 @@ public class ShellSorter extends AbstractSorter {
 
         exchangeCount++;
     }
+    @SuppressWarnings("unchecked")
     private boolean less(Comparable[] a,int index,int space){
         compareCount++;
 
