@@ -114,20 +114,21 @@ public class SortTest {
         bottomMergeSorter.summary();
     }
 
-    @Test
-    public void QuickSorterTest() {
-        println("-------------------------QuickSorter Test--------------------------------");
-        println("时间复杂度 O(N*log(N))    N = 100");
-        SortableObj[] arrQuickSorter = ObjArrFactory.generate(num);
-        println("length: " + arrQuickSorter.length);
-        QuickSorter quickSorter = new QuickSorter();
-        //shellSorter.setExp(5);
-        println("before sorted");
-        quickSorter.show(arrQuickSorter);
-        quickSorter.sort(arrQuickSorter);
-        assertEquals(true, quickSorter.testSorted(arrQuickSorter));
-        println("after sorted");
-        quickSorter.show(arrQuickSorter);
-        quickSorter.summary();
-    }
+//    @Test
+//    public void QuickSorterTest() {
+//        println("-------------------------QuickSorter Test--------------------------------");
+//        println("时间复杂度 O(N*log(N))    N = 100");
+//        SortableObj[] arrQuickSorter = ObjArrFactory.generate(num);
+//        println("length: " + arrQuickSorter.length);
+//        QuickSorter quickSorter = new QuickSorter();
+//        //shellSorter.setExp(5);
+//        println("before sorted");
+//        quickSorter.show(arrQuickSorter);
+//        quickSorter.sort(arrQuickSorter);
+//        assertEquals(true, quickSorter.testSorted(arrQuickSorter));
+//        println("after sorted");
+//        quickSorter.show(arrQuickSorter);
+//        quickSorter.summary();
+//    }
+//
 }
